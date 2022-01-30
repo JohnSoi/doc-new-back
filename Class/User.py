@@ -4,7 +4,7 @@ from Platform.Class.BaseClass import BaseClass
 from Platform.Helpers.Password import Password
 from Platform.Helpers.HttpQuery import HttpQueryHelpers as HttpQuery
 
-from Models import User as UserModel
+from Models.User import User as UserModel
 
 
 class User(BaseClass):

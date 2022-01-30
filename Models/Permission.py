@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Text
-from app import BaseModel
+from app import BaseModel, engine
 
 
 class Permission(BaseModel):
@@ -15,3 +15,11 @@ class Permission(BaseModel):
             'id': self.id,
             'name': self.name
         }
+
+    @staticmethod
+    def add_default_data():
+        engine.session.add_all([
+            Permission(name='PARAMS'),
+            Permission(name='AMBULANCE'),
+            Permission(name='EMPLOYEE')
+        ])
