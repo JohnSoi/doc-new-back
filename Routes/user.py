@@ -12,12 +12,6 @@ def login():
     return User.login(engine.session, request_data.get('login'), request_data.get('password'))
 
 
-@app.route('/user/<uuid>')
-@cross_origin()
-def get_user(uuid: str):
-    return User.get_user_info(uuid)
-
-
 @app.route('/user/list', methods=['POST'])
 @cross_origin()
 def get():

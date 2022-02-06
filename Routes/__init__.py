@@ -2,6 +2,7 @@ from Class.System import System
 from .permission import *
 from .user import *
 from .role import *
+from .patient import *
 
 
 @app.route('/default-settings', methods=['GET'])
