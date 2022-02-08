@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from app import BaseModel, engine
@@ -20,11 +20,11 @@ class User(BaseModel):
     photo_url = Column(Text)
     login = Column(Text, nullable=False, index=True)
     password = Column(Text, nullable=False)
-    date_create = Column(Date)
+    date_create = Column(DateTime)
     date_birthday = Column(Date)
-    date_update = Column(Date)
-    date_delete = Column(Date)
-    last_active = Column(Date)
+    date_update = Column(DateTime)
+    date_delete = Column(DateTime)
+    last_active = Column(DateTime)
     is_active = Column(Boolean, default=True)
 
     role = relationship("Role", lazy='joined')
@@ -40,8 +40,8 @@ class User(BaseModel):
         self.photo_url = record.get('photo_url')
         self.login = record.get('login')
         self.password = password_helpers.get_hash(record.get('password'))
-        self.date_create = record.get('date_create') or datetime.now().date()
-        self.date_update = datetime.now().date()
+        self.date_create = record.get('date_create') or datetime.now()
+        self.date_update = datetime.now()
         self.date_delete = record.get('date_delete')
         self.date_birthday = record.get('date_birthday')
         self.last_active = record.get('last_active')

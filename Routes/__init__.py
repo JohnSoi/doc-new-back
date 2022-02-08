@@ -3,6 +3,7 @@ from .permission import *
 from .user import *
 from .role import *
 from .patient import *
+from .service import *
 
 
 @app.route('/default-settings', methods=['GET'])

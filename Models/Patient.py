@@ -1,21 +1,20 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Text, Date, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from app import BaseModel, engine
-from Platform.Helpers.Password import Password
-from .Role import Role
+from app import BaseModel
 
 
 class Patient(BaseModel):
     __tablename__ = 'patients'
     id = Column(Integer, primary_key=True)
     uuid = Column(Text, unique=True)
-    name = Column(Text, nullable=False, index=True)
-    surname = Column(Text, nullable=False, index=True)
-    second_name = Column(Text, nullable=False, index=True)
+    name = Column(Text, nullable=True, index=True)
+    surname = Column(Text, nullable=True, index=True)
+    second_name = Column(Text, nullable=True, index=True)
+    address = Column(Text, nullable=True, index=True)
     telephone = Column(Text, nullable=False, index=True)
     email = Column(Text, nullable=True, index=True)
     doctor_id = Column(Integer, ForeignKey('users.id'))
@@ -25,11 +24,11 @@ class Patient(BaseModel):
     type = Column(Integer)
     num_card = Column(Integer)
     date_birthday = Column(Date)
-    date_create = Column(Date)
-    date_update = Column(Date)
-    date_delete = Column(Date)
-    date_discharge = Column(Date)
-    date_receipt = Column(Date)
+    date_create = Column(DateTime)
+    date_update = Column(DateTime)
+    date_delete = Column(DateTime)
+    date_discharge = Column(DateTime)
+    date_receipt = Column(DateTime)
 
     doctor = relationship("User")
 
@@ -39,6 +38,7 @@ class Patient(BaseModel):
         self.name = record.get('name')
         self.surname = record.get('surname')
         self.second_name = record.get('second_name')
+        self.address = record.get('address')
         self.telephone = record.get('telephone')
         self.email = record.get('email')
         self.doctor_id = record.get('doctor_id')
@@ -48,11 +48,11 @@ class Patient(BaseModel):
         self.type = record.get('type')
         self.num_card = record.get('num_card')
         self.date_birthday = record.get('date_birthday')
-        self.date_create = record.get('date_create') or datetime.now().date()
+        self.date_create = record.get('date_create') or datetime.now()
         self.date_update = datetime.now().date()
         self.date_delete = record.get('date_delete')
         self.date_discharge = record.get('date_discharge')
-        self.date_receipt = record.get('date_receipt') or datetime.now().date()
+        self.date_receipt = record.get('date_receipt') or datetime.now()
 
         return self
 
@@ -63,6 +63,7 @@ class Patient(BaseModel):
             'name': self.name,
             'surname': self.surname,
             'second_name': self.second_name,
+            'address': self.address,
             'telephone': self.telephone,
             'email': self.email,
             'doctor_id': self.doctor_id,
