@@ -15,7 +15,7 @@ class User(BaseModel):
     uuid = Column(Text, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
-    second_name = Column(Text, nullable=False, index=True)
+    second_name = Column(Text, nullable=True)
     role_id = Column(Integer, ForeignKey('roles.id'))
     photo_url = Column(Text)
     login = Column(Text, nullable=False, index=True)
@@ -39,13 +39,15 @@ class User(BaseModel):
         self.role_id = record.get('role_id')
         self.photo_url = record.get('photo_url')
         self.login = record.get('login')
-        self.password = password_helpers.get_hash(record.get('password'))
+        self.password = password_helpers.get_hash(record.get('password')) if record.get('password') else ''
         self.date_create = record.get('date_create') or datetime.now()
         self.date_update = datetime.now()
         self.date_delete = record.get('date_delete')
         self.date_birthday = record.get('date_birthday')
         self.last_active = record.get('last_active')
-        self.is_active = record.get('is_active')
+        self.is_active = record.get('is_active') if record.get('is_active') is not None else True
+
+        return self
 
     def to_dict(self):
         return {
@@ -57,6 +59,7 @@ class User(BaseModel):
              'role_id': self.role_id,
              'photo_url': self.photo_url,
              'login': self.login,
+             'password': self.password,
              'date_create': self.date_create,
              'date_update': self.date_update,
              'date_delete': self.date_delete,
@@ -66,7 +69,7 @@ class User(BaseModel):
              'role': self.role.to_dict() if self.role else None,
              'full_name': '{} {}.{}'.format(self.surname or '',
                                             self.name[0] if self.name else '',
-                                            self.second_name[0] if self.second_name[0] else '')
+                                            self.second_name[0] if self.second_name else '')
         }
 
     @staticmethod

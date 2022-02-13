@@ -23,7 +23,7 @@ def get():
 @cross_origin()
 def create_user():
     request_data = request.get_json() or {}
-    return User.create(request_data.get('record'))
+    return User.create(request_data)
 
 
 @app.route('/user/update', methods=['POST'])

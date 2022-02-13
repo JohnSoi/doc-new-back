@@ -67,7 +67,7 @@ class Patient(BaseModel):
             'telephone': self.telephone,
             'email': self.email,
             'doctor_id': self.doctor_id,
-            'ward': self.ward,
+            'ward': int(self.ward or 1),
             'discription': self.discription,
             'comment': self.comment,
             'type': self.type,
