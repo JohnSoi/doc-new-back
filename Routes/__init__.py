@@ -4,6 +4,7 @@ from .user import *
 from .role import *
 from .patient import *
 from .service import *
+from .operation import *
 
 
 @app.route('/default-settings', methods=['GET'])

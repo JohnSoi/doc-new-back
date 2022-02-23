@@ -1,8 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Text, Boolean, DateTime
+from sqlalchemy import Column, Integer, Text, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 
-from app import BaseModel
+from Models.User import User
+from app import BaseModel, engine
 
 
 class Service(BaseModel):
@@ -15,9 +17,12 @@ class Service(BaseModel):
     is_bonus_work_percent = Column(Boolean, default=False)
     bonus_add = Column(Integer)
     is_bonus_add_percent = Column(Boolean, default=False)
+    user_create_id = Column(Integer, ForeignKey('users.id'))
     date_create = Column(DateTime)
     date_update = Column(DateTime)
     date_delete = Column(DateTime)
+
+    user_create = relationship("User", lazy='joined')
 
     def from_object(self, record: dict):
         self.name = record.get('name')
@@ -30,6 +35,7 @@ class Service(BaseModel):
         self.date_create = datetime.now()
         self.date_update = datetime.now()
         self.date_delete = record.get('date_delete')
+        self.user_create_id = engine.session.query(User).where(User.uuid == record.get('user')).first().id
 
         return self
 
@@ -45,5 +51,6 @@ class Service(BaseModel):
             'is_bonus_add_percent': self.is_bonus_add_percent or False,
             'date_create': self.date_create,
             'date_update': self.date_update,
-            'date_delete': self.date_delete
+            'date_delete': self.date_delete,
+            'user_create': self.user_create
         }

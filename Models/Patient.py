@@ -4,7 +4,8 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, Text, Date, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from app import BaseModel
+from Models.User import User
+from app import BaseModel, engine
 
 
 class Patient(BaseModel):
@@ -24,6 +25,7 @@ class Patient(BaseModel):
     type = Column(Integer)
     num_card = Column(Integer)
     date_birthday = Column(Date)
+    user_create_id = Column(Integer, ForeignKey('users.id'))
     date_create = Column(DateTime)
     date_update = Column(DateTime)
     date_delete = Column(DateTime)
@@ -31,6 +33,7 @@ class Patient(BaseModel):
     date_receipt = Column(DateTime)
 
     doctor = relationship("User")
+    user_create = relationship("User", lazy='joined')
 
     def from_object(self, record: dict):
         self.id = record.get('id')
@@ -48,6 +51,7 @@ class Patient(BaseModel):
         self.type = record.get('type')
         self.num_card = record.get('num_card')
         self.date_birthday = record.get('date_birthday')
+        self.user_create_id = engine.session.query(User).where(User.uuid == record.get('user')).first().id
         self.date_create = record.get('date_create') or datetime.now()
         self.date_update = datetime.now().date()
         self.date_delete = record.get('date_delete')
@@ -78,6 +82,7 @@ class Patient(BaseModel):
             'date_delete': self.date_delete,
             'date_discharge': self.date_discharge,
             'date_receipt': self.date_receipt,
+            'user_create': self.user_create,
             'full_name': '{} {}.{}'.format(self.surname or '',
                                            self.name if self.name else '',
                                            self.second_name if self.second_name else '')
