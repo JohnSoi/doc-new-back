@@ -8,6 +8,8 @@ from Models.User import User as UserModel
 
 
 class User(BaseClass):
+    AREA = 'User'
+
     @staticmethod
     def get_model(new_model: bool = False):
         return UserModel() if new_model else UserModel

@@ -32,8 +32,8 @@ class Patient(BaseModel):
     date_discharge = Column(DateTime)
     date_receipt = Column(DateTime)
 
-    doctor = relationship("User")
-    user_create = relationship("User", lazy='joined')
+    doctor = relationship("User", lazy='joined', foreign_keys=[doctor_id])
+    user_create = relationship("User", lazy='joined', foreign_keys=[user_create_id])
 
     def from_object(self, record: dict):
         self.id = record.get('id')
@@ -83,8 +83,10 @@ class Patient(BaseModel):
             'date_discharge': self.date_discharge,
             'date_receipt': self.date_receipt,
             'user_create': self.user_create,
-            'full_name': '{} {}.{}'.format(self.surname or '',
-                                           self.name if self.name else '',
-                                           self.second_name if self.second_name else '')
+            'full_name': self.get_full_name(),
         }
 
+    def get_full_name(self):
+        return '{} {}.{}'.format(self.surname or '',
+                                 self.name if self.name else '',
+                                 self.second_name if self.second_name else '')

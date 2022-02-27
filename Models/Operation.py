@@ -25,7 +25,8 @@ class Operation(BaseModel):
     def from_object(self, record: dict):
         self.id = record.get('id')
         self.patient_id = record.get('patient_id')
-        self.user_create_id = engine.session.query(User).where(User.uuid == record.get('user')).first().id
+        self.user_create_id = engine.session.query(User).where(User.uuid == record.get('user')).first().id \
+            if record.get('user') else self.user_create_id
         self.type = record.get('type') or CARD_TYPE['AMBULANCE']
         self.sum = record.get('sum') or 0
         self.date_create = datetime.now()
@@ -44,6 +45,6 @@ class Operation(BaseModel):
             'date_create': self.date_create,
             'date_update': self.date_update,
             'date_delete': self.date_delete,
-            'user_create': self.user_create,
-            'patient': self.patient
+            'user_create': self.user_create.to_dict() if self.user_create else None,
+            'patient': self.patient.to_dict() if self.patient else None
         }

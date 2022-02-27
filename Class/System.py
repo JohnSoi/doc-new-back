@@ -9,6 +9,8 @@ from app import engine
 
 
 class System(SystemPlatform):
+    AREA = 'System'
+
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
     @staticmethod

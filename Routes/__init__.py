@@ -5,6 +5,7 @@ from .role import *
 from .patient import *
 from .service import *
 from .operation import *
+from Platform.Routes import *
 
 
 @app.route('/default-settings', methods=['GET'])

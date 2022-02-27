@@ -4,6 +4,8 @@ from Models import Role as RoleModel
 
 
 class Role(BaseClass):
+    AREA = 'Role'
+
     @staticmethod
     def get_model(new_model: bool = False):
         return RoleModel() if new_model else RoleModel

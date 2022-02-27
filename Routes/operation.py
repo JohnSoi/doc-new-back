@@ -1,5 +1,8 @@
 from flask import request
 from flask_cors import cross_origin
+
+from Platform.Class.HistoryService import HistoryService
+from Platform.Constants.HistoryService import HISTORY_ACTIONS_TYPE
 from app import app, engine
 
 from Class.Operation import Operation
@@ -9,6 +12,7 @@ from Class.Operation import Operation
 @cross_origin()
 def get_operation():
     request_data = request.get_json() or {}
+
     return Operation.list(engine.session, request_data.get('navigation'), request_data.get('filter'))
 
 

@@ -24,3 +24,10 @@ def create_patient():
 def update_patient():
     request_data = request.get_json() or {}
     return Patient.update(request_data)
+
+
+@app.route('/patient/search', methods=['POST'])
+@cross_origin()
+def search_patient():
+    request_data = request.get_json() or {}
+    return Patient.search(engine.session, request_data.get('searchString'), request_data.get('filter'))
