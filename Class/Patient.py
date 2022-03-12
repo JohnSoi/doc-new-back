@@ -22,43 +22,8 @@ class Patient(BaseClass):
         return query
 
     @classmethod
-    def search(cls, session: Session, search_str: str, filters: dict = None):
-        result = []
-        surname = search_str
-        name = ''
-        second_name = ''
-        if ' ' in search_str:
-            part_name = search_str.split(' ')
-            surname = part_name[0]
-            name = part_name[1] if len(part_name) else ''
-            second_name = part_name[2] if len(part_name) > 2 else ''
-        where_conditions_argumnets = [cls.get_model().surname.like('%{}%'.format(surname))]
-
-        if name:
-            where_conditions_argumnets.append(cls.get_model().name.like('%{}%'.format(name)))
-
-        if second_name:
-            where_conditions_argumnets.append(cls.get_model().second_name.like('%{}%'.format(second_name)))
-
-        cls._prepare_filters_in_condition(where_conditions_argumnets, filters)
-        query = session.query(cls.get_model()).where(*where_conditions_argumnets)
-
-        if not query.count() and not name and not second_name:
-            where_conditions_argumnets = [cls.get_model().surname.like('%{}%'.format(search_str)),
-                                          cls.get_model().name.like('%{}%'.format(search_str)),
-                                          cls.get_model().second_name.like(
-                                              '%{}%'.format(search_str))]
-            cls._prepare_filters_in_condition(where_conditions_argumnets, filters)
-            query = session.query(cls.get_model()).where(or_(*where_conditions_argumnets))
-
-        if query.count():
-            result = [item.to_dict() for item in query]
-            for item_result in result:
-                item_result['value'] = '{} {} {}'.format(item_result.get('surname', ''),
-                                                         item_result.get('name', ''),
-                                                         item_result.get('second_name', ''))
-
-        return HttpQueryHelpers.json_response(data=result)
+    def search(cls, session: Session, search_str: str, filters: dict = None, only_list: bool = False):
+        return super().user_search(session, search_str, filters, only_list)
 
     @classmethod
     def _prepare_filters_in_condition(cls, conditions: list, filters: dict):

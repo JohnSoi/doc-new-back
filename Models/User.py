@@ -67,6 +67,7 @@ class User(BaseModel):
              'last_active': self.last_active,
              'is_active': self.is_active,
              'role': self.role.to_dict() if self.role else None,
+             'role_name': self.role.to_dict().get('name') if self.role and self.role.to_dict() else None,
              'full_name': '{} {}.{}'.format(self.surname or '',
                                             self.name[0] if self.name else '',
                                             self.second_name[0] if self.second_name else '')
